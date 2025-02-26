@@ -18,17 +18,26 @@ Another way to interpolated is through Neville's algorithm (Q2b). This is shown 
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.9\linewidth]{./plots/Neville_interpolation.png}
-  \caption{Result to subquestion 2b. On top of the results from the LU_interpolations, the same 1000 points are interpolated using Neville's interpolation algorithm. Neville's algorithm has a much better accuracy.}
+  \caption{Result to subquestion 2b. On top of the results from the LU interpolations, the same 1000 points are interpolated using Neville's interpolation algorithm. Neville's algorithm has a much better accuracy. Thi. Calculating terms of order $\mathcal{O}(x^{19})$ introduces large round-off error in the LU method to which Nevilles algorithm is not subject.}
   \label{fig:Neville}
 \end{figure}
 
-Lastly the LU decomposition can be improved iteratively (!Q2c). This is shown in figure \ref{fig:LU_iterative}. The main source of the larger error using the LU decomposition is round-off error. The LU decomposition calculated the coefficients for a 19th order polynomial. The result is then calculated by inserting any given x-value. This requires computing up to the 19th power of x ($x^{19}$), giving numbers of order $\matchal{O}(x^19)$. The largest points are $x\sim100$ which are amplified to order \mathcal{O}(10^{38})$. To make up
+Lastly the LU decomposition can be improved iteratively (Q2c). This is shown in figure \ref{fig:LU_iterative}. The main source of the larger error using the LU decomposition is round-off error. The LU decomposition calculated the coefficients for a 19th order polynomial. The result is then calculated by inserting any given x-value. This requires computing up to the 19th power of x ($x^{19}$), giving numbers of order $\mathcal{O}(x^{19})$. The largest points are $x\sim100$ which are amplified to order $\mathcal{O}(10^{38})$. On the other hand Nevilles algorithm creates step-by-step better interpolations at a given x, using more and more datapoints. But every step is directly computed from the x and y-values of the datapoints. It does not compute an analytical form of the 19th order polynomial. For this reason the numerical order of magnitude in the calculation is relatively small and the round-off error is limited.
 
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.9\linewidth]{./plots/LU_iterative.png}
-  \caption{Result to subquestion 2b. On top of the results from the LU_interpolations, and Neville's algorithm, the results from an iteratively improved LU algorithm is shown. Both for 1 iteration and for 10 iterations.}
+  \caption{Result to subquestion 2b. On top of the results from the LU interpolations, and Neville's algorithm, the results from an iteratively improved LU algorithm is shown. Both for 1 iteration and for 10 iterations.}
   \label{fig:LU_iterative}
 \end{figure}
+
+The times in ms it takes are determined by computing the 1000 interpolated points using each method 1000 times. Nevilles algorithm is the clear winner here, although LU interpolation is not far behind. The iterative LU method is far behind, taking about 20 times as long.
+
+Nevilles algorithm is the fastest as it requires the least amount of computations. Starting with 20 points which are combined in pairs, it takes $19+18+...+2+1=190$ steps to get to the final result. The LU method needs many computations to perform the LU decomposition, but the advantage is that it only needs to be done once. As we can see from the time analysis of this decomposition, the dominant contribution to the time of the LU interpolation comes from performing this decompositionl. Once this is done, and after the coefficients are calculated in the next step, evaluating the 19th order polynomial is quick. For 1000 points, the final times end up roughly equal for both methods. The LU method thus has a larger set time, but lower time per datapoints after the setup is completed. We should thus expect it to become significantly more efficient for a larger number of interpolated points.
+
+Indeed this is exactly what we see. For 10000 interpolated points, the LU method is significantly faster than Nevilles algorithm. Even the LU method with 10 iterations is significantly faster. The absolute extra time the 10 iterations take is similar for 1000 and 10000 simulated points, as we should expect since this computation is only done once. For a large number of interpolated values, the difference in time between these two becomes less relevant, whereas the difference with Nevilles method becomes more important.
+
+We do need to keep in mind that Nevilles algorithm has a lower error as discussed earlier. For a small number of points (<1000), Nevilles algorithm is both faster and more accurate. However for a large number of points, the choice of algorithm is a tradeoff between accuracy and efficiency.
+
 
 \lstinputlisting{interpolation.txt}

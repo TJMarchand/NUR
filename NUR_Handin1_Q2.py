@@ -175,7 +175,7 @@ def Neville_interpolation(x_interp, x_vals, y_vals):
 
 
 # Load the data
-data=np.genfromtxt(os.path.join(sys.path[0],"Vandermonde.txt",comments='#',dtype=np.float64)
+data=np.genfromtxt(os.path.join(sys.path[0],"Vandermonde.txt"),comments='#',dtype=np.float64)
 x=data[:,0]
 y=data[:,1]
 
@@ -211,7 +211,7 @@ line,=axs[0].plot(xx,yya,color='orange')
 line.set_label('Via LU decomposition')
 axs[0].legend(frameon=False,loc="lower left")
 axs[1].plot(x,abs(y-ya),color='orange')
-plt.savefig('plots/LU_interpolation.png',dpi=600)
+plt.savefig('./plots/LU_interpolation.png',dpi=600)
 
 
 #For questions 2b and 2c, add this block
@@ -219,7 +219,7 @@ line,=axs[0].plot(xx,yyb,linestyle='dashed',color='green')
 line.set_label('Via Neville\'s algorithm')
 axs[0].legend(frameon=False,loc="lower left")
 axs[1].plot(x,abs(y-yb),linestyle='dashed',color='green')
-plt.savefig('plots/Neville_interpolation.png',dpi=600)
+plt.savefig('./plots/Neville_interpolation.png',dpi=600)
 
 #For question 2c, add this block too
 line,=axs[0].plot(xx,yyc1,linestyle='dotted',color='red')
@@ -229,7 +229,7 @@ line,=axs[0].plot(xx,yyc10,linestyle='dashdot',color='purple')
 line.set_label('LU with 10 iterations')
 axs[1].plot(x,abs(y-yc10),linestyle='dashdot',color='purple')
 axs[0].legend(frameon=False,loc="lower left")
-plt.savefig('plots/LU_iterative.png',dpi=600)
+plt.savefig('./plots/LU_iterative.png',dpi=600)
 
 # #Don't forget to caption your figures to describe them/
 # #mention what conclusions you draw from them!
@@ -239,11 +239,50 @@ plt.savefig('plots/LU_iterative.png',dpi=600)
 # Argument needs to be a string or callable, so we can pass a dummy lambda
 # function which computes the interpolations to timeit.timeit
 
-execution_time_a=timeit.timeit(lambda: LU_interpolation(xx,x,y),number=10)
+execution_time_a=timeit.timeit(lambda: LU_interpolation(xx,x,y),number=100)
 execution_time_b=timeit.timeit(lambda: Neville_interpolation(xx,x,y),
-                               number=10)
+                               number=100)
 execution_time_c=timeit.timeit(lambda: LU_interpolation(xx,x,y,iterations=10),
-                               number=10)
-print(execution_time_a)
-print(execution_time_b)
-print(execution_time_c)
+                               number=100)
+
+# Test how long LU decomposition takes. Manually compute V, then only decompose
+def get_V(x):
+    """Returns the Vandermonde matrix given an array of x-values
+    
+    Arguments:
+        x, array: array of x-values
+        
+    Returns:
+        Vandermonde matrix"""
+        
+    V = np.ones([len(x), len(x)])
+    for i in range(1, len(x)):
+        V[:,i] = x**i
+    return V
+        
+V = get_V(x)
+
+execution_time_decomposition = timeit.timeit(lambda: Crouts(V), number=100)
+
+print("Computation times for 1000 interpolated points, 100 repetitions:")
+print(f'LU interpolation: t = {execution_time_a} ms')
+print(f'Neville interpolation: t = {execution_time_b} ms')
+print(f'LU interpolation with 10 iterations: t = {execution_time_c} ms')
+print(f'LU decomposition only: t = {execution_time_decomposition} ms')
+
+
+# Test what the times are for 10000 interpolated points.
+xx10000 = xx=np.linspace(x[0],x[-1],10001)
+
+execution_time_a10000=timeit.timeit(lambda: LU_interpolation(xx10000,x,y),
+                                    number=100)
+execution_time_b10000=timeit.timeit(lambda: Neville_interpolation(xx10000,x,y),
+                                    number=100)
+execution_time_c10000=timeit.timeit(lambda: LU_interpolation(xx10000,x,y,
+                                                             iterations=10),
+                                    number=100)
+
+print("Computation times for 10000 interpolated points, 100 repetitions:")
+print(f'LU interpolation: t = {execution_time_a10000} ms')
+print(f'Neville interpolation: t = {execution_time_b10000} ms')
+print(f'LU interpolation with 10 iterations: t = {execution_time_c10000} ms')
