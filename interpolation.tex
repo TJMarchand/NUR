@@ -1,0 +1,34 @@
+\section{Interpolation}
+
+The file of this exercise is:
+
+\lstinputlisting{NUR_Handin1_Q2.py}
+
+A plot showing the LU decomposition (Q2a) is shown in figure \ref{fig:LU}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.9\linewidth]{./plots/LU_interpolation.png}
+  \caption{Result to subquestion 2a. Via LU decomposition a 19th order polynomial passing through 20 data points is calculated and plotted at 1000 points. The difference between the result from the 19th order polynomial and the true data points is plotted in the bottom panel.}
+  \label{fig:LU}
+\end{figure}
+
+Another way to interpolated is through Neville's algorithm (Q2b). This is shown on top of the LU decomposition in figure \ref{fig:Neville}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.9\linewidth]{./plots/Neville_interpolation.png}
+  \caption{Result to subquestion 2b. On top of the results from the LU_interpolations, the same 1000 points are interpolated using Neville's interpolation algorithm. Neville's algorithm has a much better accuracy.}
+  \label{fig:Neville}
+\end{figure}
+
+Lastly the LU decomposition can be improved iteratively (!Q2c). This is shown in figure \ref{fig:LU_iterative}. The main source of the larger error using the LU decomposition is round-off error. The LU decomposition calculated the coefficients for a 19th order polynomial. The result is then calculated by inserting any given x-value. This requires computing up to the 19th power of x ($x^{19}$), giving numbers of order $\matchal{O}(x^19)$. The largest points are $x\sim100$ which are amplified to order \mathcal{O}(10^{38})$. To make up
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.9\linewidth]{./plots/LU_iterative.png}
+  \caption{Result to subquestion 2b. On top of the results from the LU_interpolations, and Neville's algorithm, the results from an iteratively improved LU algorithm is shown. Both for 1 iteration and for 10 iterations.}
+  \label{fig:LU_iterative}
+\end{figure}
+
+\lstinputlisting{interpolation.txt}
