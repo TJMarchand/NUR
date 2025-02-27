@@ -144,7 +144,7 @@ def LU_interpolation(x_interp, x_vals, y_vals,
     if iterations:
         c = iterative_Crouts_improvement(V, V_crout, y_vals, c, iterations)
         
-    if store_c:
+    if print_c:
         for i in range(len(c)):
             print(f"c_{i} = {c[i]:.2e}")
         print()
@@ -188,7 +188,7 @@ y=data[:,1]
 xx=np.linspace(x[0],x[-1],1001) # x values to interpolate at
 
 # Calculate interpolated y-values
-yya = LU_interpolation(xx, x, y)
+yya = LU_interpolation(xx, x, y, print_c=True)
 ya = LU_interpolation(x, x, y)
 
 yyb = Neville_interpolation(xx, x, y)
