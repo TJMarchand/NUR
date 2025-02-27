@@ -13,7 +13,7 @@ A plot showing the LU decomposition (Q2a) is shown in figure \ref{fig:LU}.
   \label{fig:LU}
 \end{figure}
 
-Another way to interpolated is through Neville's algorithm (Q2b). This is shown on top of the LU decomposition in figure \ref{fig:Neville}.
+Another way to interpolated is through Neville's algorithm (Q2b). This is shown on top of the LU decomposition in figure \ref{fig:Neville}. The returned coefficients can be found at the end as well.
 
 \begin{figure}[h!]
   \centering
@@ -37,7 +37,7 @@ Nevilles algorithm is the fastest as it requires the least amount of computation
 
 Indeed this is exactly what we see. For 10000 interpolated points, the LU method is significantly faster than Nevilles algorithm. Even the LU method with 10 iterations is significantly faster. The absolute extra time the 10 iterations take is similar for 1000 and 10000 simulated points, as we should expect since this computation is only done once. For a large number of interpolated values, the difference in time between these two becomes less relevant, whereas the difference with Nevilles method becomes more important.
 
-We do need to keep in mind that Nevilles algorithm has a lower error as discussed earlier. For a small number of points (<1000), Nevilles algorithm is both faster and more accurate. However for a large number of points, the choice of algorithm is a tradeoff between accuracy and efficiency.
+We do need to keep in mind that Nevilles algorithm has a lower error as discussed earlier. For a small number of points ($<1000$), Nevilles algorithm is both faster and more accurate. However for a large number of points, the choice of algorithm is a tradeoff between accuracy and efficiency.
 
 
 \lstinputlisting{interpolation.txt}

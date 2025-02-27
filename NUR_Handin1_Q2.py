@@ -114,7 +114,7 @@ def get_y(x_interp, c):
 
 
 def LU_interpolation(x_interp, x_vals, y_vals, 
-                     iterations=None, store_c = False):
+                     iterations=None, print_c = False):
     """Applies LU decomposition to interpolate.
     
     Arguments:
@@ -124,9 +124,9 @@ def LU_interpolation(x_interp, x_vals, y_vals,
         iterations, int (optional):
                         Number of iterations improvements on LU decomposition
                         to perform. Default = None.
-        store_c, bool (optional):
-                        If True, stores the c in a file names coefficient.txt.
-                        Default = False
+        print_c, bool (optional):
+                        If True, print the coefficients (after iteration)
+                        in a file names coefficient.txt. Default = False
                         
     Returns
         array with interpolated y-values.
@@ -137,12 +137,17 @@ def LU_interpolation(x_interp, x_vals, y_vals,
     for i in range(1, len(x)):
         V[:,i] = x**i
         
-    # Perform LU decomposition and find the coefficients
+    #Perform LU decomposition and find the coefficients
     V_crout = Crouts(V)
     c = solve_system(V_crout, y)
     
     if iterations:
         c = iterative_Crouts_improvement(V, V_crout, y_vals, c, iterations)
+        
+    if store_c:
+        for i in range(len(c)):
+            print(f"c_{i} = {c[i]:.2e}")
+        print()
         
     y_interp = get_y(x_interp, c)
         
